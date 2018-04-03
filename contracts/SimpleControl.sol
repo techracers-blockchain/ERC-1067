@@ -8,6 +8,16 @@ import "./DataManager.sol";
 contract SimpleControl is ERC20, DataManager {
     using SafeMath for uint;
 
+    // not necessary to store in data centre
+    bool public mintingFinished = false;
+
+    event Mint(address indexed to, uint256 amount);
+
+    modifier canMint() {
+        require(!mintingFinished);
+        _;
+    }
+
     function SimpleControl(address _dataCentreAddr) public
         DataManager(_dataCentreAddr) {
     }
@@ -37,6 +47,14 @@ contract SimpleControl is ERC20, DataManager {
     function transferFrom(address _from, address _to, uint256 _amount, bytes _data) public whenNotPaused returns (bool) {
         _setAllowance(_from, _to, allowance(_from, _to).sub(_amount));
         _transfer(_from, _to, _amount, _data);
+        return true;
+    }
+
+    function mint(address _to, uint256 _amount) public whenNotPaused onlyOwner canMint returns (bool) {
+        _setTotalSupply(totalSupply().add(_amount));
+        _setBalanceOf(_to, balanceOf(_to).add(_amount));
+        Mint(_to, _amount);
+        Transfer(address(0), _to, _amount);
         return true;
     }
 
