@@ -21,10 +21,6 @@ contract DataManager is Pausable {
         selfdestruct(_newTokenContract);
     }
 
-    function transferDataCentreOwnership(address _nextOwner) public onlyOwner whenPaused {
-        DataCentre(dataCentreAddr).transferOwnership(_nextOwner);
-    }
-
     // Constant Functions
     function balanceOf(address _owner) constant returns (uint256) {
         return DataCentre(dataCentreAddr).getBalanace("STK", _owner);
