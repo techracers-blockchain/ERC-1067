@@ -12,6 +12,7 @@ contract SimpleControl is ERC20, DataManager {
     bool public mintingFinished = false;
 
     event Mint(address indexed to, uint256 amount);
+    event MintToggle(bool status);
 
     modifier canMint() {
         require(!mintingFinished);
@@ -55,6 +56,18 @@ contract SimpleControl is ERC20, DataManager {
         _setBalanceOf(_to, balanceOf(_to).add(_amount));
         Mint(_to, _amount);
         Transfer(address(0), _to, _amount);
+        return true;
+    }
+
+    function startMinting() public whenNotPaused onlyOwner returns (bool) {
+        mintingFinished = false;
+        MintToggle(mintingFinished);
+        return true;
+    }
+
+    function finishMinting() public whenNotPaused onlyOwner returns (bool) {
+        mintingFinished = true;
+        MintToggle(mintingFinished);
         return true;
     }
 
