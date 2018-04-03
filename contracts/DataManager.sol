@@ -13,9 +13,12 @@ contract DataManager is Pausable {
         dataCentreAddr = _dataCentreAddr == address(0) ? address(createDataCentre()) : _dataCentreAddr;
     }
 
-    // Owner Functions
-    function setDataCentreAddress(address _dataCentreAddr) public onlyOwner whenPaused {
-        dataCentreAddr = _dataCentreAddr;
+    // This handles the upgradeability part
+    function kill(address _newTokenContract) public onlyOwner {
+        if (dataCentreAddr != address(0)) {
+            Ownable(dataCentreAddr).transferOwnership(msg.sender);
+        }
+        selfdestruct(_newTokenContract);
     }
 
     function transferDataCentreOwnership(address _nextOwner) public onlyOwner whenPaused {
