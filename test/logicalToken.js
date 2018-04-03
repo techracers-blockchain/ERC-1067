@@ -239,48 +239,4 @@ contract('Token', (accounts) => {
       }
     });
   });
-
-  describe('#security considerations', () => {
-    it('should allow to transfer ownership of DataCentre contract to FOUNDERS manually', async () => {
-      // pause and transfer ownership
-      await token.pause();
-      await token.transferDataCentreOwnership(accounts[0]);
-      const dataCentreAddr = await token.dataCentreAddr.call();
-      const dataCentre = DataCentre.at(dataCentreAddr);
-      const newOwnerDataCentre = await dataCentre.owner.call();
-
-      assert.equal(newOwnerDataCentre, accounts[0], 'ownership not transferred');
-    });
-
-    it('should allow to transfer ownership of DataCentre contract from FOUNDERS to DataCentre manually', async () => {
-      // pause and transfer ownership
-      await token.pause();
-      await token.transferDataCentreOwnership(accounts[0]);
-      const dataCentreAddr = await token.dataCentreAddr.call();
-      const dataCentre = DataCentre.at(dataCentreAddr);
-      let newOwnerDataCentre = await dataCentre.owner.call();
-
-      assert.equal(newOwnerDataCentre, accounts[0], 'ownership not transferred');
-
-      await dataCentre.transferOwnership(token.address);
-      newOwnerDataCentre = await dataCentre.owner.call();
-
-      assert.equal(newOwnerDataCentre, token.address, 'ownership not transferred');
-    });
-
-    it('should not allow to transfer ownership of DataCentre contract to FOUNDERS when not Paused', async () => {
-      // pause and transfer ownership
-      try {
-        await token.transferDataCentreOwnership(accounts[0]);
-        assert.fail('should have failed before');
-      } catch(error) {
-        assertJump(error);
-      }
-      const dataCentreAddr = await token.dataCentreAddr.call();
-      const dataCentre = DataCentre.at(dataCentreAddr);
-      const newOwnerDataCentre = await dataCentre.owner.call();
-
-      assert.equal(newOwnerDataCentre, token.address, 'ownership not transferred');
-    });
-  });
 })
