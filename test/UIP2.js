@@ -21,6 +21,7 @@ contract('UIP1', (accounts) => {
       const tokenBalanceTransfered = await token.balanceOf.call(BENEFICIARY);
 
       // Begin upgrade
+      await token.pause();
       const dataCentre = await DataCentre.at(await token.dataCentreAddr.call());
       const newToken = await Token.new(dataCentre.address);
       await token.kill(newToken.address);
@@ -32,6 +33,18 @@ contract('UIP1', (accounts) => {
       await newToken.transfer(TOKENHOLDER_1, tokensAmount, {from: BENEFICIARY});
       const tokenBalanceTransfered2 = await newToken.balanceOf.call(TOKENHOLDER_1);            
       assert.equal(tokensAmount, tokenBalanceTransfered2.toNumber(), 'tokens not transferred');            
+    });
+
+    it('should not allow killing token when not paused', async () => {
+      
+      const dataCentre = await DataCentre.at(await token.dataCentreAddr.call());
+      const newToken = await Token.new(dataCentre.address);
+      try {
+        await token.kill(newToken.address);
+        assert.fail('should have failed before');
+      } catch (error) {
+        assertJump(error)
+      }
     });
 
 })

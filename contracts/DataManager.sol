@@ -14,7 +14,7 @@ contract DataManager is Pausable {
     }
 
     // This handles the upgradeability part
-    function kill(address _newTokenContract) public onlyOwner {
+    function kill(address _newTokenContract) public onlyOwner whenPaused {
         if (dataCentreAddr != address(0)) {
             Ownable(dataCentreAddr).transferOwnership(msg.sender);
         }
@@ -22,15 +22,15 @@ contract DataManager is Pausable {
     }
 
     // Constant Functions
-    function balanceOf(address _owner) constant returns (uint256) {
+    function balanceOf(address _owner) public constant returns (uint256) {
         return DataCentre(dataCentreAddr).getBalanace("STK", _owner);
     }
 
-    function totalSupply() constant returns (uint256) {
+    function totalSupply() public constant returns (uint256) {
         return DataCentre(dataCentreAddr).getValue("STK", "totalSupply");
     }
 
-    function allowance(address _owner, address _spender) constant returns (uint256) {
+    function allowance(address _owner, address _spender) public constant returns (uint256) {
         return DataCentre(dataCentreAddr).getConstraint("STK", _owner, _spender);
     }
 
