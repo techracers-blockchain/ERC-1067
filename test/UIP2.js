@@ -1,13 +1,16 @@
 const Token = artifacts.require('./mocks/MockLogicalToken.sol');
 const DataCentre = artifacts.require('./token/DataCentre.sol');
 const assertJump = require('./helpers/assertJump');
+const assertRevert = require('./helpers/assertRevert');
 
 contract('UIP1', (accounts) => {
   let token;
   let dataCentre;
 
   beforeEach(async () => {
-    token = await Token.new("0x00");
+    dataCentre = await DataCentre.new();
+    token = await Token.new(dataCentre.address);
+    await dataCentre.transferOwnership(token.address);
     await token.mint(accounts[0], 100);
   });
 
@@ -43,7 +46,7 @@ contract('UIP1', (accounts) => {
         await token.kill(newToken.address);
         assert.fail('should have failed before');
       } catch (error) {
-        assertJump(error)
+        assertRevert(error)
       }
     });
 

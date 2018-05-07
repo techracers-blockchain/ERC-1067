@@ -1,13 +1,16 @@
 const Token = artifacts.require('./mocks/MockLogicalToken.sol');
 const DataCentre = artifacts.require('./token/DataCentre.sol');
 const assertJump = require('./helpers/assertJump');
+const assertRevert = require('./helpers/assertRevert');
 
 contract('Token', (accounts) => {
   let token;
   let dataCentre;
 
   beforeEach(async () => {
-    token = await Token.new("0x");
+    dataCentre = await DataCentre.new();
+    token = await Token.new(dataCentre.address);
+    await dataCentre.transferOwnership(token.address);
     await token.mint(accounts[0], 100);
   });
 
@@ -70,7 +73,7 @@ contract('Token', (accounts) => {
         await token.transfer(BENEFICIARY, tokensAmount, {from: TOKENHOLDER_1});
         assert.fail('should have failed before');
       } catch(error) {
-        assertJump(error);
+        assertRevert(error);
         const tokenBalanceTransfered = await token.balanceOf.call(BENEFICIARY);
         assert.equal(tokenBalanceTransfered.toNumber(), 0, 'tokens transferred');
       }
@@ -85,7 +88,7 @@ contract('Token', (accounts) => {
         await token.mint(BENEFICIARY, 100);
         assert.fail('should have failed before');
       } catch(error) {
-        assertJump(error);
+        assertRevert(error);
         const tokenBalanceTransfered = await token.balanceOf.call(BENEFICIARY);
         assert.equal(tokenBalanceTransfered.toNumber(), 0, 'tokens transferred');
       }
@@ -101,7 +104,7 @@ contract('Token', (accounts) => {
         await token.transfer(BENEFICIARY, tokensAmount, {from: BENEFICIARY});
         assert.fail('should have failed before');
       } catch(error) {
-        assertJump(error);
+        assertRevert(error);
       }
     });
 
@@ -115,7 +118,7 @@ contract('Token', (accounts) => {
         await token.transfer('0x00', tokensAmount, {from: BENEFICIARY});
         assert.fail('should have failed before');
       } catch(error) {
-        assertJump(error);
+        assertRevert(error);
       }
     });
 
@@ -129,7 +132,7 @@ contract('Token', (accounts) => {
         await token.transfer(TOKENHOLDER_1, 0, {from: BENEFICIARY});
         assert.fail('should have failed before');
       } catch(error) {
-        assertJump(error);
+        assertRevert(error);
       }
     });
   });
@@ -163,7 +166,7 @@ contract('Token', (accounts) => {
         await token.approve(BENEFICIARY, tokensAmount, {from: TOKENHOLDER_1});
         assert.fail('should have failed before');
       } catch(error) {
-        assertJump(error);
+        assertRevert(error);
         const tokenBalanceAllowed = await token.allowance.call(TOKENHOLDER_1, BENEFICIARY);
         assert.equal(tokenBalanceAllowed.toNumber(), 0, 'tokens still allowed');
       }
@@ -179,7 +182,7 @@ contract('Token', (accounts) => {
         await token.approve(BENEFICIARY, tokensAmount, {from: BENEFICIARY});
         assert.fail('should have failed before');
       } catch(error) {
-        assertJump(error)
+        assertRevert(error)
         const tokenBalanceAllowed = await token.allowance.call(TOKENHOLDER_1, BENEFICIARY);
         assert.equal(tokenBalanceAllowed.toNumber(), 0, 'tokens still allowed');
       }
@@ -216,7 +219,7 @@ contract('Token', (accounts) => {
         await token.transferFrom(TOKENHOLDER_1, BENEFICIARY, tokensAmount, {from: BENEFICIARY});
         assert.fail('should have failed before');
       } catch(error) {
-        assertJump(error);
+        assertRevert(error);
         const tokenBalanceTransfered = await token.balanceOf.call(BENEFICIARY);
         assert.equal(tokenBalanceTransfered.toNumber(), 0, 'tokens still transferred');
       }
@@ -233,7 +236,7 @@ contract('Token', (accounts) => {
         await token.approve(BENEFICIARY, tokensAmount, {from: SCAMMER});
         assert.fail('should have failed before');
       } catch(error) {
-        assertJump(error);
+        assertRevert(error);
         const tokenBalanceAllowed = await token.allowance.call(TOKENHOLDER_1, BENEFICIARY);
         assert.equal(tokenBalanceAllowed.toNumber(), 0, 'tokens still transferred');
       }
