@@ -10,7 +10,7 @@ contract DataManager is Pausable {
     address public dataCentreAddr;
 
     function DataManager(address _dataCentreAddr) {
-        dataCentreAddr = _dataCentreAddr == address(0) ? address(createDataCentre()) : _dataCentreAddr;
+        dataCentreAddr = _dataCentreAddr;
     }
 
     // This handles the upgradeability part
@@ -21,16 +21,16 @@ contract DataManager is Pausable {
         selfdestruct(_newTokenContract);
     }
 
-    // Constant Functions
-    function balanceOf(address _owner) public constant returns (uint256) {
+    // view Functions
+    function balanceOf(address _owner) public view returns (uint256) {
         return DataCentre(dataCentreAddr).getBalanace("STK", _owner);
     }
 
-    function totalSupply() public constant returns (uint256) {
+    function totalSupply() public view returns (uint256) {
         return DataCentre(dataCentreAddr).getValue("STK", "totalSupply");
     }
 
-    function allowance(address _owner, address _spender) public constant returns (uint256) {
+    function allowance(address _owner, address _spender) public view returns (uint256) {
         return DataCentre(dataCentreAddr).getConstraint("STK", _owner, _spender);
     }
 

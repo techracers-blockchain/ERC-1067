@@ -25,8 +25,8 @@ contract DataCentre is Ownable {
         containers[_container].constraints[_source][_key] = _value;
     }
 
-    // Constant Functions
-    function getValue(bytes32 _container, bytes32 _key) public constant returns(uint256) {
+    // view Functions
+    function getValue(bytes32 _container, bytes32 _key) public view returns(uint256) {
         return containers[_container].values[_key];
     }
 
@@ -34,7 +34,7 @@ contract DataCentre is Ownable {
         return containers[_container].balances[_key];
     }
 
-    function getConstraint(bytes32 _container, address _source, address _key) constant returns(uint256) {
+    function getConstraint(bytes32 _container, address _source, address _key) view returns(uint256) {
         return containers[_container].constraints[_source][_key];
     }
 }

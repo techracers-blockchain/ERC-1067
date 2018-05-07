@@ -16,11 +16,6 @@ contract LogicalToken is SimpleControl {
     function LogicalToken(address _dataCentreAddr) public
         SimpleControl(_dataCentreAddr)
     {
-        if (_dataCentreAddr == address(0)) {
-            // initial token distribution to be put in here
-            _setTotalSupply(INITIAL_SUPPLY);
-            _setBalanceOf(msg.sender, INITIAL_SUPPLY);
-        }
+    
     }
-
 }
