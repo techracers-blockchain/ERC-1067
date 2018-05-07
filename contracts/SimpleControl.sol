@@ -51,26 +51,6 @@ contract SimpleControl is ERC20, DataManager {
         return true;
     }
 
-    function mint(address _to, uint256 _amount) public whenNotPaused onlyOwner canMint returns (bool) {
-        _setTotalSupply(totalSupply().add(_amount));
-        _setBalanceOf(_to, balanceOf(_to).add(_amount));
-        Mint(_to, _amount);
-        Transfer(address(0), _to, _amount);
-        return true;
-    }
-
-    function startMinting() public whenNotPaused onlyOwner returns (bool) {
-        mintingFinished = false;
-        MintToggle(mintingFinished);
-        return true;
-    }
-
-    function finishMinting() public whenNotPaused onlyOwner returns (bool) {
-        mintingFinished = true;
-        MintToggle(mintingFinished);
-        return true;
-    }
-
     function _transfer(address _from, address _to, uint256 _amount, bytes _data) internal {
         require(_to != address(this));
         require(_to != address(0));

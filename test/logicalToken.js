@@ -1,4 +1,4 @@
-const Token = artifacts.require('./LogicalToken.sol');
+const Token = artifacts.require('./mocks/MockLogicalToken.sol');
 const DataCentre = artifacts.require('./token/DataCentre.sol');
 const assertJump = require('./helpers/assertJump');
 
@@ -7,7 +7,7 @@ contract('Token', (accounts) => {
   let dataCentre;
 
   beforeEach(async () => {
-    token = await Token.new();
+    token = await Token.new("0x");
     await token.mint(accounts[0], 100);
   });
 
