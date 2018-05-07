@@ -20,7 +20,7 @@ if testrpc_running; then
   echo "Using existing testrpc instance"
 else
   echo "Starting our own testrpc instance"
-  testrpc \
+  ganache-cli \
   -p \
   9000 \
   > /dev/null &
