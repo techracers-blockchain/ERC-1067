@@ -1,20 +1,20 @@
 pragma solidity ^0.4.11;
 
-import "../LogicalToken.sol";
+import "../ERC1067.sol";
 
 
 /**
  Logical Token based on UIP2 model
  */
-contract MockLogicalToken is LogicalToken {
+contract MockERC1067 is ERC1067 {
 
     /**
     * @dev Constructor that gives msg.sender all of existing tokens.
     */
-    function MockLogicalToken(address _dataCentreAddr) public
-        LogicalToken(_dataCentreAddr)
+    function MockERC1067(address _dataCentreAddr) public
+        ERC1067(_dataCentreAddr)
     {
- 
+
     }
 
     function mint(address _to, uint256 _amount) public whenNotPaused onlyOwner canMint returns (bool) {
@@ -38,4 +38,3 @@ contract MockLogicalToken is LogicalToken {
     }
 
 }
-

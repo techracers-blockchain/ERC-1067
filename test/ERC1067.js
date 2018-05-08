@@ -1,15 +1,15 @@
-const Token = artifacts.require('./mocks/MockLogicalToken.sol');
+const ERC1067 = artifacts.require('./mocks/MockERC1067.sol');
 const DataCentre = artifacts.require('./token/DataCentre.sol');
 const assertJump = require('./helpers/assertJump');
 const assertRevert = require('./helpers/assertRevert');
 
-contract('Token', (accounts) => {
+contract('ERC1067', (accounts) => {
   let token;
   let dataCentre;
 
   beforeEach(async () => {
     dataCentre = await DataCentre.new();
-    token = await Token.new(dataCentre.address);
+    token = await ERC1067.new(dataCentre.address);
     await dataCentre.transferOwnership(token.address);
     await token.mint(accounts[0], 100);
   });

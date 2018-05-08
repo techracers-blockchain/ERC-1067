@@ -1,7 +1,7 @@
 {
-  "name": "uip2",
+  "name": "erc-1067",
   "version": "0.1.0",
-  "description": "contract architecture with uip2 implementation",
+  "description": "erc contract architecture with uip2 implementation",
   "author": "Nidish Ramakrishnan",
   "license": "MIT",
   "main": "truffle.js",
