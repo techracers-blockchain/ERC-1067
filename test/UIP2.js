@@ -28,7 +28,6 @@ contract('UIP1', (accounts) => {
       const dataCentre = await DataCentre.at(await token.dataCentreAddr.call());
       const newToken = await ERC1067.new(dataCentre.address);
       await token.kill(newToken.address);
-      await dataCentre.transferOwnership(newToken.address);
 
       // check balances and functions after upgrade
       const tokenBalanceTransfered1 = await newToken.balanceOf.call(BENEFICIARY);

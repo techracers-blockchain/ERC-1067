@@ -16,7 +16,7 @@ contract DataManager is Pausable {
     // This handles the upgradeability part
     function kill(address _newTokenContract) public onlyOwner whenPaused {
         if (dataCentreAddr != address(0)) {
-            Ownable(dataCentreAddr).transferOwnership(msg.sender);
+            Ownable(dataCentreAddr).transferOwnership(_newTokenContract);
         }
         selfdestruct(_newTokenContract);
     }
